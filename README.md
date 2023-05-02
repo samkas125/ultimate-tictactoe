@@ -13,3 +13,5 @@ This is a python project that allows a user to play ultimate tic tac toe against
 - openai gym
 
 ### Screenshots
+![Empty Board](https://user-images.githubusercontent.com/101554474/235619097-1a17f2b9-e79c-4cce-a599-ef9c14768927.png)
+![Game in Progress](https://user-images.githubusercontent.com/101554474/235619968-23c7c257-96b3-4d11-812c-2207f2936b0f.png)
