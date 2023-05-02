@@ -1,10 +1,7 @@
 from uttt.environment import Board, UltimateTicTacToeEnv
-from stable_baselines3 import PPO, DQN
+from stable_baselines3 import PPO
 from pygame.locals import *
-from gym import spaces
-import numpy as np
 import pygame, os
-import gym
 
 pygame.init()
 
