@@ -1,4 +1,4 @@
-from gym import spaces
+from gym.spaces import Box, Discrete, Tuple
 import numpy as np
 import gym
 
@@ -104,8 +104,9 @@ class UltimateTicTacToeEnv(gym.Env):
 
         self.reset()
 
-        self.action_space = spaces.Discrete(81)  # 9 boards * 9 squares = 81 actions spaces.Discrete(10) [0, 1, 2, 3, 4, ... 9]
-        self.observation_space = spaces.Box(low=0, high=2, shape=(83,), dtype=np.int)
+        self.action_space = Discrete(81)  # 9 boards * 9 squares = 81 actions spaces.Discrete(10) [0, 1, 2, 3, 4, ... 9]
+        
+        self.observation_space = Box(low=0, high=2, shape=(83,), dtype=np.int)
 
     def reset(self):
         self.board = Board()
@@ -122,20 +123,21 @@ class UltimateTicTacToeEnv(gym.Env):
             board = action[0]
             square = action[1]
         self.board.update()
-        self.action_space = spaces.Discrete(len(list(self.board.valid_moves.keys())))
+        self.action_space = Discrete(len(list(self.board.valid_moves.values())))
         if self.board.isValid(board, square):
+            reward += 3
             self.board.addValue(self.current_player, board, square)
             self.board.update()
-            self.action_space = spaces.Discrete(len(list(self.board.valid_moves.keys())))
+            self.action_space = Discrete(len(list(self.board.valid_moves.values())))
             if (hasWon(self.board.values[board]) == self.current_player):
-                reward += 1
+                reward += 5
             done, winner = self.check_game_over(board, square)
             if done:
-                if (winner == self.current_player): reward += 5
+                if (winner == self.current_player): reward += 10
 
             self.current_player = 3 - self.current_player
         else:
-            reward = -1
+            reward -= 3
             done = False
 
         return self.get_state(), reward, done, {}
@@ -159,4 +161,5 @@ class UltimateTicTacToeEnv(gym.Env):
 
     def render(self, mode='human'):
         print(self.board.values)
+
 

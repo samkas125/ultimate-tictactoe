@@ -177,25 +177,27 @@ def main():
         if hasWon(env.board.completed) != 0: # Win condition
             print(f'Player {hasWon(env.board.completed)} has won the game')
             continue
+        
+        if env.current_player == 2:
+                repeat += 1
+                if (repeat >= 20):
+                    env.step(env.board.valid_moves[env.action_space.sample()])
+                action, _ = model.predict(env.get_state())
+                state, reward, done, info = env.step(action)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
             if env.current_player == 1:
-                if repeat: print(repeat)
+                # if repeat: print(repeat)
                 repeat = 0
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
                     boardIndex, cellIndex = locToIndex(x, y)
                     env.step((boardIndex, cellIndex))
                     
-            if env.current_player == 2:
-                if (repeat >= 50):
-                    env.step(env.action_space.sample())
-                action, _ = model.predict(env.get_state())
-                state, reward, done, info = env.step(action)
-                repeat += 1
+            
             
 
     
