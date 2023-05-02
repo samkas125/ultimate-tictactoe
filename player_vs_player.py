@@ -1,22 +1,3 @@
-"""
-Machine learning model to play ultimate tic-tac-toe
-"""
-# import tensorflow as tf
-# import numpy as np
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.layers import Dense
-# from tensorflow.keras.layers import Reshape
-# from sklearn.metrics import accuracy_score
-
-# model = Sequential()
-# model.add(Reshape(target_shape=(9*3*3), input_shape=(9, 3, 3)))
-# model.add(Dense(units=256, activation='relu'))
-# model.add(Dense(units=192, activation='relu'))
-# model.add(Dense(units=128, activation='relu'))
-# model.add(Dense(units=9, activation='softmax'))
-
-# model.compile(optimizer='adam', loss='binary_crossentropy', metrics='accuracy')
-
 from pygame.locals import *
 import pygame, os
 pygame.init()
@@ -121,7 +102,6 @@ class Board:
         else:
             self.pointer = indexCell
 
-
 board = Board()
 
 def locToIndex(rawx, rawy):
@@ -222,12 +202,6 @@ def main():
         if hasWon(board.completed): # Win condition
             print(f'Player {hasWon(board.completed)} has won the game')
             continue
-
-        # for i in board.completed: # Draw condition
-        #     if i == 0:
-        #         break
-        #     print(f'The game is a draw')
-        #     break
 
         if not (0 in board.completed):
             print('The game is a draw')
