@@ -1,13 +1,13 @@
 from uttt.environment import Board, UltimateTicTacToeEnv
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO, DQN
 from pygame.locals import *
 import pygame, os
+import random
 
 pygame.init()
 
 # Initializing global variables
-model = PPO.load("models/ultimate_tic_tac_toe_ppo_final")
-
+model = DQN.load("models/ultimate_tic_tac_toe_dqn_test4")
 WIN_SIZE = 600
 WINDOW = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
 pygame.display.set_caption('Ultimate Tic-Tac-Toe')
@@ -166,6 +166,7 @@ def main():
     clock = pygame.time.Clock()
     run = True
     repeat=0
+    state = env.get_state()
     while run:
         clock.tick(100)
         draw_window(env.board)
@@ -174,15 +175,16 @@ def main():
             print('The game is a draw')
             continue
 
-        if hasWon(env.board.completed) != 0: # Win condition
+        if hasWon(env.board.completed) != 0:
             print(f'Player {hasWon(env.board.completed)} has won the game')
             continue
         
         if env.current_player == 2:
                 repeat += 1
                 if (repeat >= 20):
-                    env.step(env.board.valid_moves[env.action_space.sample()])
-                action, _ = model.predict(env.get_state())
+                    env.step(random.choice(list(env.board.valid_moves.values())))
+                action, _ = model.predict(state)
+                print(action)
                 state, reward, done, info = env.step(action)
 
         for event in pygame.event.get():
@@ -190,7 +192,6 @@ def main():
                 run = False
                 pygame.quit()
             if env.current_player == 1:
-                # if repeat: print(repeat)
                 repeat = 0
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x,y = pygame.mouse.get_pos()
