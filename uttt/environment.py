@@ -1,4 +1,4 @@
-from gym.spaces import Box, Discrete, MultiDiscrete
+from gym.spaces import Box, Discrete
 import numpy as np
 import gym
 
@@ -121,15 +121,15 @@ class UltimateTicTacToeEnv(gym.Env):
             self.board.addValue(self.current_player, board, square)
             self.board.update()
             if (Board.hasWon(self.board.values[board]) == self.current_player):
-                reward += 1
-            done, winner = self.check_game_over(board, square)
+                reward += 3
+            done, winner = self.check_game_over()
             if done:
-                if (winner == self.current_player): reward += 2
+                if (winner == self.current_player): reward += 10
 
             self.current_player = 3 - self.current_player # switching between players
         else:
-            reward -= 999
-            done = False
+            reward -= 3
+            done = True
 
         return self.get_state(), reward, done, {}
 
@@ -141,7 +141,7 @@ class UltimateTicTacToeEnv(gym.Env):
         state = np.append(state, self.current_player)
         return state
 
-    def check_game_over(self, board, square):
+    def check_game_over(self):
 
         if Board.hasWon(self.board.completed) == 0:
             return False, 0
