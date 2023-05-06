@@ -6,7 +6,11 @@ Ultimate Tic-Tac-Toe is an expanded form of Tic-Tac-Toe that is played on a 9x9 
 
 This is a python project that allows a user to play ultimate tic tac toe against another player or against a reinforcement learning agent. The agent was implemented using a raw implementation of `DQN` in `PyTorch` along with an `openai gym` environment.
 
-### Libraries used
+### How to run
+- Run `pvp.py` to play against another local player.
+- Run `pvRL.py` to play against RL agent.
+
+### Dependencies: `requirements.txt`
 - PyGame
 - PyTorch
 - MatPlotLib
