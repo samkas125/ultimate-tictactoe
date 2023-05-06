@@ -5,7 +5,7 @@ pygame.init()
 # Initializing global variables
 WIN_SIZE = 600
 WINDOW = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
-pygame.display.set_caption('Ultimate Tic-Tac-Toe')
+pygame.display.set_caption('Ultimate Tic-Tac-Toe (PvP)')
 BOARD_IMG = pygame.image.load(os.path.join('assets', 'board.png'))
 BOARD_IMG = pygame.transform.scale(BOARD_IMG, (WIN_SIZE, WIN_SIZE))
 Ximg = pygame.image.load(os.path.join('assets', 'cross.png'))
