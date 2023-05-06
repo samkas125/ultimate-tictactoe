@@ -191,7 +191,6 @@ def main():
                 else:
                     action = agent.choose_action(state)
                     state, reward, done, info = env.step(action)
-                    print(reward)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
