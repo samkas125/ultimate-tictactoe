@@ -97,6 +97,7 @@ class Board:
 
     def addValue(self, player, indexBoard, indexCell):
         self.values[indexBoard][indexCell] = player
+        self.completed = [hasWon(i) for i in self.values]
         if self.completed[indexCell] != 0:
             self.pointer = -1
         else:
