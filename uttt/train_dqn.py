@@ -1,11 +1,12 @@
-import torch
-import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-import random
-import numpy as np
 import matplotlib.pyplot as plt
 from uttt.environment import *
+import torch.optim as optim
+import torch.nn as nn
+import numpy as np
+import random
+import torch
+import os
 
 env = UltimateTicTacToeEnv()
 observation_space = env.observation_space.shape[0]
@@ -39,9 +40,10 @@ class Network(torch.nn.Module):
         self.fc2 = nn.Linear(256, 512)
         self.fc3 = nn.Linear(512, 1024)
         self.fc4 = nn.Linear(1024, 1024)
-        self.fc5 = nn.Linear(1024, 512)
-        self.fc6 = nn.Linear(512, 256)
-        self.fc7 = nn.Linear(256, self.action_space)
+        self.fc5 = nn.Linear(1024, 1024)
+        self.fc6 = nn.Linear(1024, 512)
+        self.fc7 = nn.Linear(512, 256)
+        self.fc8 = nn.Linear(256, self.action_space)
 
         self.optimizer = optim.Adam(self.parameters(), lr=LEARNING_RATE)
         self.loss = nn.MSELoss()
@@ -57,7 +59,8 @@ class Network(torch.nn.Module):
         x = F.relu(self.fc4(x))
         x = F.relu(self.fc5(x))
         x = F.relu(self.fc6(x))
-        x = self.fc7(x)
+        x = F.relu(self.fc7(x))
+        x = self.fc8(x)
 
         return x
 
@@ -172,6 +175,6 @@ if __name__ == '__main__':
     torch.save({
                 'model_state_dict': agent.network.state_dict(),
                 'optimizer_state_dict': agent.network.optimizer.state_dict()
-            }, '/models/agent2.pth')
+            }, '../models/agent2.pth')
     plt.plot(episode_number, average_reward_number)
     plt.show()
