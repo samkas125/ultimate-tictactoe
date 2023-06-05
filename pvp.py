@@ -1,9 +1,12 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from pygame.locals import *
-import pygame, os
+import pygame
 pygame.init()
 
 # Initializing global variables
 WIN_SIZE = 600
+SIDE = WIN_SIZE / 3
 WINDOW = pygame.display.set_mode((WIN_SIZE, WIN_SIZE))
 pygame.display.set_caption('Ultimate Tic-Tac-Toe (PvP)')
 BOARD_IMG = pygame.image.load(os.path.join('assets', 'board.png'))
@@ -85,9 +88,11 @@ class Board:
             return False
         
         if self.pointer == -1:
-            self.pointer = indexBoard
+            temp_pointer = indexBoard
+        else:
+            temp_pointer = self.pointer
         
-        if (self.pointer != indexBoard):
+        if (temp_pointer != indexBoard):
             return False
 
         if self.values[indexBoard][indexCell] != 0:
@@ -171,9 +176,40 @@ def hasWon(valueArray):
     
     return 0
 
-
-def draw_window(board: Board):
+def draw_window(board: Board, prev_move):
     WINDOW.blit(BOARD_IMG, (0, 0))
+    completed = board.completed
+    highlight_squares = []
+
+    for i in range(9):
+        if completed[i] != 0:
+            continue
+        for j in range(9):
+            if board.isValid(i, j) and (not i in highlight_squares):
+                highlight_squares.append(i)
+    
+    yellow = pygame.Surface((SIDE, SIDE), pygame.SRCALPHA)
+    yellow.fill((255, 255, 153, 0.2*255))
+    red = pygame.Surface((SIDE, SIDE), pygame.SRCALPHA)
+    red.fill((255, 51, 0, 0.2*255))
+    blue = pygame.Surface((SIDE, SIDE), pygame.SRCALPHA)
+    blue.fill((51, 204, 255, 0.2*255))
+    for i in highlight_squares:
+        x = (i % 3) * SIDE
+        y = (i // 3) * SIDE
+        WINDOW.blit(yellow, (x, y))
+
+    for i in range(len(completed)):
+        if completed[i] == 1:
+            x = (i % 3) * SIDE
+            y = (i // 3) * SIDE
+            WINDOW.blit(red, (x, y))
+
+        if completed[i] == 2:
+            x = (i % 3) * SIDE
+            y = (i // 3) * SIDE
+            WINDOW.blit(blue, (x, y))
+
     for i in range(9):
         for j in range(9):
             if board.values[i][j] == 0:
@@ -189,36 +225,48 @@ def draw_window(board: Board):
                 O.show()
                 continue
 
+    if prev_move:
+        pos = indexToLoc(prev_move[0], prev_move[1])
+        pos = (pos[0] - WIN_SIZE/32, pos[1] - WIN_SIZE/32)
+        s = pygame.Surface((SIDE / 3, SIDE / 3), pygame.SRCALPHA)
+        s.fill((255, 51, 0, 0.2*255))
+        WINDOW.blit(s, pos)
 
     pygame.display.update()
 
 def main():
+    board = Board()
     curr_player = 1
     clock = pygame.time.Clock()
     run = True
+    prev_move = False
     while run:
-        clock.tick(10)
-        draw_window(board)
+        clock.tick(60)
+        draw_window(board, prev_move)
             
         if hasWon(board.completed): # Win condition
             print(f'Player {hasWon(board.completed)} has won the game')
-            continue
+            board = Board()
+            prev_move = False
+            curr_player = 1
 
         if not (0 in board.completed):
             print('The game is a draw')
-            continue
+            board = Board()
+            prev_move = False
+            curr_player = 1
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 x,y = pygame.mouse.get_pos()
                 boardIndex, cellIndex = locToIndex(x, y)
                 if board.isValid(boardIndex, cellIndex):
                     board.addValue(curr_player, boardIndex, cellIndex)
                     board.completed[boardIndex] = hasWon(board.values[boardIndex])
-                    # if (hasWon(board.values[boardIndex]) == curr_player):
+                    prev_move = (boardIndex, cellIndex)
                     curr_player = 3 - curr_player
 
     
