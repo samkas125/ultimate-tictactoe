@@ -13,6 +13,8 @@ BOARD_IMG = pygame.image.load(os.path.join('assets', 'board.png'))
 BOARD_IMG = pygame.transform.scale(BOARD_IMG, (WIN_SIZE, WIN_SIZE))
 Ximg = pygame.image.load(os.path.join('assets', 'cross.png'))
 Oimg = pygame.image.load(os.path.join('assets', 'circle.png'))
+icon = pygame.image.load(os.path.join('assets', 'icon.png')).convert_alpha()
+pygame.display.set_icon(icon)
 
 # Class used for cross image
 class Cross:
