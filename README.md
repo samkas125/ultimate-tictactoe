@@ -17,8 +17,9 @@ It makes use of `policy` and `value` neural networks to evaluate the best moves 
 The MCTS algorithm is slightly modified in AlphaZero to consider the information provided by the `value` and `policy` networks in its expansion and backpropagation phases. Specifically, nodes with higher policies are preferred in expansion, and the simulation phase is replaced with the `value` of the leaf node. 
 
 <p align="center" width="100%">
-    <img src="https://github.com/samkas125/ultimate-tictactoe/assets/101554474/dc78c56f-1970-432f-9875-3e7a95b98e5a"> 
+    <img src="https://github.com/samkas125/ultimate-tictactoe/assets/101554474/3b0017da-5b1c-479c-8229-310fee38357a"> 
 </p>
+
 
 ### How to run
 - Run `pvp.py` to play against another local player.
