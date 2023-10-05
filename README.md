@@ -14,7 +14,13 @@ It makes use of `policy` and `value` neural networks to evaluate the best moves 
 
 ### MCTS + Neural Networks in AlphaZero
 
-The MCTS algorithm is slightly modified in AlphaZero to consider the information provided by the `value` and `policy` networks in its expansion and backpropagation phases. Specifically, nodes with higher policies are preferred in expansion, and the simulation phase is replaced with the `value` of the leaf node. 
+The MCTS algorithm is slightly modified in AlphaZero to consider the information provided by the `value` and `policy` networks in its expansion and backpropagation phases. Specifically, nodes with higher policies are preferred in expansion, and the simulation phase is replaced with the `value` of the leaf node. The below image shows the MCTS search using AlphaZero for (regular) Tic-Tac-Toe, played on a 3x3 grid.
+
+`N`: Number of times the position has been visited in the search tree.
+
+`W`: Cumulative reward received from the position.
+
+`P`: Policy (expressed as probability) evaluation of the move played to reach the specified position.
 
 <p align="center" width="100%">
     <img src="https://github.com/samkas125/ultimate-tictactoe/assets/101554474/3b0017da-5b1c-479c-8229-310fee38357a"> 
