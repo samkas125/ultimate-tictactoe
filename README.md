@@ -39,8 +39,10 @@ The MCTS algorithm is slightly modified in AlphaZero to consider the information
 </p>
 
 <p align="center" width="100%">
-    <img src="https://github.com/samkas125/ultimate-tictactoe/assets/101554474/64af057b-cd64-4de2-a4b9-60f721d7551e"> 
+    <img src="https://github.com/samkas125/ultimate-tictactoe/assets/101554474/462efaf6-8a97-46f6-917e-0bacacf32f02"> 
 </p>
+
+
 
 
 
