@@ -30,6 +30,7 @@ The MCTS algorithm is slightly modified in AlphaZero to consider the information
 ### How to run
 - Run `pvp.py` to play against another local player.
 - Run `pvAlphaZero.py` to play against RL agent.
+- Run `train.py` to train a new model (or further train the existing model).
 
 ### Dependencies: `requirements.txt`
 - PyGame
