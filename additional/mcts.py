@@ -1,6 +1,9 @@
 import numpy as np
 import math
 import torch
+from additional.minimax import evaluate, evaluate_policy
+
+MINIMAX = False
 
 class Node:
     def __init__(self, game, args, state, parent=None, action_taken=None, prior=0, visit_count=0):
@@ -48,7 +51,7 @@ class Node:
                 child = Node(self.game, self.args, child_state, self, action, prob)
                 self.children.append(child)
                 
-        return child
+        return
             
     def backpropagate(self, value):
         self.value_sum += value
@@ -68,15 +71,20 @@ class MCTS:
     def search(self, state):
         root = Node(self.game, self.args, state, visit_count=1)
         
-        policy, _ = self.model(
-            torch.tensor(self.game.get_encoded_state(state), device=self.model.device).unsqueeze(0)
-        )
-        policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
-        policy = (1 - self.args['dirichlet_epsilon']) * policy + self.args['dirichlet_epsilon'] \
-            * np.random.dirichlet([self.args['dirichlet_alpha']] * self.game.action_size)
+        if MINIMAX:
+            value = evaluate(state)
+            policy = evaluate_policy(state)
+            print(policy)
+        else:
+            policy, _ = self.model(
+                torch.tensor(self.game.get_encoded_state(state), device=self.model.device).unsqueeze(0)
+            )
+            policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
+            policy = (1 - self.args['dirichlet_epsilon']) * policy + self.args['dirichlet_epsilon'] \
+                * np.random.dirichlet([self.args['dirichlet_alpha']] * self.game.action_size)
         
-        valid_moves = self.game.get_valid_moves(state)
-        policy *= valid_moves
+            valid_moves = self.game.get_valid_moves(state)
+            policy *= valid_moves
         policy /= np.sum(policy)
         root.expand(policy)
         
@@ -90,16 +98,20 @@ class MCTS:
             value = self.game.get_opponent_value(value)
             
             if not is_terminal:
-                policy, value = self.model(
-                    torch.tensor(self.game.get_encoded_state(node.state), device=self.model.device).unsqueeze(0)
-                )
-                policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
-                valid_moves = self.game.get_valid_moves(node.state)
-                policy *= valid_moves
-                policy /= np.sum(policy)
+                if MINIMAX:
+                    value = evaluate(state)
+                    policy = evaluate_policy(state)
+                else:
+                    policy, value = self.model(
+                        torch.tensor(self.game.get_encoded_state(node.state), device=self.model.device).unsqueeze(0)
+                    )
+                    policy = torch.softmax(policy, axis=1).squeeze(0).cpu().numpy()
+                    valid_moves = self.game.get_valid_moves(node.state)
+                    policy *= valid_moves
+                    policy /= np.sum(policy)
                 
-                value = value.item()
-                
+                    value = value.item()
+
                 node.expand(policy)
                 
             node.backpropagate(value)    
