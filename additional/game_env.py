@@ -109,7 +109,7 @@ class UltimateTicTacToe:
     def change_perspective(self, state, player):
         if state.shape == (11, 9):
             pointer = state[9, 0]
-            state *= player
+            state *= -1
             state[9] = pointer
             return state
         else:
