@@ -1,5 +1,6 @@
 import numpy as np
 from additional.mcts import *
+from additional.minimax import evaluate
 import random
 import torch.nn.functional as F
 from tqdm.notebook import trange
@@ -144,7 +145,9 @@ class AlphaZeroParallel:
             policy_targets = torch.tensor(policy_targets, dtype=torch.float32, device=self.model.device)
             value_targets = torch.tensor(value_targets, dtype=torch.float32, device=self.model.device)
             
+            # ADD MINIMAX OUTPUTS LINE 148 INSTEAD OF MODEL OUTPUTS
             out_policy, out_value = self.model(state)
+            # out_value = evaluate(state)
             
             policy_loss = F.cross_entropy(out_policy, policy_targets)
             value_loss = F.mse_loss(out_value, value_targets)
